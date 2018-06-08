@@ -37,5 +37,10 @@ sysinfo.txt
 *.unitypackage
 
 PART01_CHAPTER01/
+PART01_CHAPTER02/
 Standard Assets/
 sky5X/
+Materials/
+
+*.prefab
+*.fbx
