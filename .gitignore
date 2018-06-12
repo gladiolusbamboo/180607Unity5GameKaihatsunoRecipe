@@ -48,3 +48,5 @@ Materials/
 
 *.prefab
 *.fbx
+*.tif
+*.cubemap
