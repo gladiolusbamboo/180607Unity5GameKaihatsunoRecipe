@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotPlayer : MonoBehaviour
+public class ShotEnemy : MonoBehaviour
 {
   public GameObject explosion;
 
-  // Use this for initialization
   void Start()
   {
     // 出現後一定時間で自動的に消滅させる
@@ -22,19 +21,10 @@ public class ShotPlayer : MonoBehaviour
 
   private void OnCollisionEnter(Collision collider)
   {
-    if(collider.gameObject.name == "Terrain")
-    {
-      // 地形とぶつかったら消滅させる
-      Destroy(gameObject);
-      // 衝突時にエフェクトを表示する
-      Instantiate(explosion, transform.position, transform.rotation);
-    }
-
-    // 敵と衝突したら消滅させる
-    if(collider.gameObject.tag == "Enemy")
+    // プレイヤーと衝突したら爆発して消滅する
+    if(collider.gameObject.tag == "Player")
     {
       Destroy(gameObject);
-      // 衝突時にエフェクトを表示する
       Instantiate(explosion, transform.position, transform.rotation);
     }
   }
