@@ -13,10 +13,17 @@ public class Enemy : MonoBehaviour
 
   public GameObject explosion;
 
+  // いわゆるヒットポイント
+  public int armorPoint;
+  public int armorPointMax = 1000;
+  int damage = 100;
+
   void Start()
   {
     // ターゲットを取得
     target = GameObject.Find("PlayerTarget");
+
+    armorPoint = armorPointMax;
   }
 
   void Update()
@@ -45,8 +52,22 @@ public class Enemy : MonoBehaviour
     // プレイヤーの弾と衝突したら消滅する
     if(collider.gameObject.tag == "Shot")
     {
-      Destroy(gameObject);
-      Instantiate(explosion, transform.position, transform.rotation);
+      // ダメージをランダムで変える
+      // damage = Random.Range(50, 150);
+
+      // プレイヤーの弾からダメージを取得する
+      damage = collider.gameObject.GetComponent<ShotPlayer>().damage;
+
+      // プレイヤーの弾と衝突したらダメージ
+      armorPoint -= damage;
+      Debug.Log("armorPoint = " + armorPoint);
+
+      // 体力が０以下になったら消滅する
+      if (armorPoint <= 0)
+      {
+        Destroy(gameObject);
+        Instantiate(explosion, transform.position, transform.rotation);
+      }
     }
   }
 }

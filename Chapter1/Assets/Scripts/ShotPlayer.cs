@@ -6,6 +6,8 @@ public class ShotPlayer : MonoBehaviour
 {
   public GameObject explosion;
 
+  public int damage = 200;
+
   // Use this for initialization
   void Start()
   {
@@ -18,6 +20,12 @@ public class ShotPlayer : MonoBehaviour
   {
     // 弾を前進させる
     transform.position += transform.forward * Time.deltaTime * 100;
+
+    // 威力減衰 最小でも１ダメージは与える
+    damage--;
+
+    if (damage <= 1)
+      damage = 1;
   }
 
   private void OnCollisionEnter(Collision collider)
