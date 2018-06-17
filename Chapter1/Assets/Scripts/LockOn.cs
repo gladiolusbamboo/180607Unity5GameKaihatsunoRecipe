@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LockOn : MonoBehaviour
 {
@@ -9,9 +10,13 @@ public class LockOn : MonoBehaviour
 
   bool isSearch;
 
+  public Image lockOnImage;
+
   void Start()
   {
     isSearch = false;
+
+    lockOnImage.enabled = false;
   }
 
   void Update()
@@ -23,12 +28,18 @@ public class LockOn : MonoBehaviour
 
       // ロックを解除する
       if (!isSearch)
+      {
+        Debug.Log("ロック解除");
         target = null;
+      }
       else
+      {
+        Debug.Log("ロックオン");
         // 一番近いターゲットを取得する
         target = FindClosestEnemy();
         // ターゲットを取得する
         //target = GameObject.FindWithTag("Enemy");
+      }
     }
 
     // ロックオンモードで敵がいれば敵の方を向く
@@ -69,6 +80,25 @@ public class LockOn : MonoBehaviour
         target = null;
       }
     }
+
+    // ターゲットがいたらロックオンカーソルを表示する
+    bool isLocked = false;
+
+    if (target != null)
+    {
+      isLocked = true;
+
+      lockOnImage.transform.rotation = Quaternion.identity;
+
+      // ターゲットの表示位置にロックオンカーソルを合わせる
+      lockOnImage.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
+    }
+    else
+    {
+      lockOnImage.transform.Rotate(0, 0, Time.deltaTime * 200);
+    }
+
+    lockOnImage.enabled = isSearch;
   }
 
   // 一番近い敵を探して取得する
