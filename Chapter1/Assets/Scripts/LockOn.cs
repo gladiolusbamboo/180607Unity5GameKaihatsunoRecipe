@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LockOn : MonoBehaviour
 {
@@ -9,9 +10,21 @@ public class LockOn : MonoBehaviour
 
   bool isSearch;
 
+  public Image lockOnImage;
+
+  public GameObject enemyAp;
+
+  public Image gaugeImage;
+
+  public Text textDistance;
+
   void Start()
   {
     isSearch = false;
+
+    lockOnImage.enabled = false;
+
+    enemyAp.SetActive(false);
   }
 
   void Update()
@@ -69,6 +82,36 @@ public class LockOn : MonoBehaviour
         target = null;
       }
     }
+
+    // ターゲットがいたらロックオンカーソルを表示する
+    bool isLocked = false;
+
+    if (target != null)
+    {
+      isLocked = true;
+
+      lockOnImage.transform.rotation = Quaternion.identity;
+
+      // ターゲットの表示位置にロックオンカーソルを合わせる
+      lockOnImage.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
+
+      // 敵の体力をゲージに反映させる
+      Enemy targetScript = target.GetComponent<Enemy>();
+      gaugeImage.transform.localScale = new Vector3((float)targetScript.armorPoint / targetScript.armorPointMax, 1, 1);
+
+      // 敵との距離を表示する
+      textDistance.text = Vector3.Distance(target.transform.position, transform.position).ToString();
+    }
+    else
+    {
+      // ロックオンモード時はカーソルを回転する
+      lockOnImage.transform.Rotate(0, 0, Time.deltaTime * 200);
+    }
+
+    lockOnImage.enabled = isSearch;
+
+    // 敵の体力ゲージの表示を切替可能にする
+    enemyAp.SetActive(isLocked);
   }
 
   // 一番近い敵を探して取得する

@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour
 
       // プレイヤーの弾と衝突したらダメージ
       armorPoint -= damage;
-      Debug.Log("armorPoint = " + armorPoint);
+      //Debug.Log("armorPoint = " + armorPoint);
 
       // 体力が０以下になったら消滅する
       if (armorPoint <= 0)
