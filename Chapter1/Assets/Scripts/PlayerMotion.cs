@@ -42,5 +42,8 @@ public class PlayerMotion : MonoBehaviour
 
     // ジャンプモーションに切り替える
     animator.SetBool("Jump", Input.GetButton("Jump"));
+
+    // ブーストキーが押されたらパラメータを切り替える
+    animator.SetBool("Boost", Input.GetButton("Boost"));
   }
 }

@@ -27,13 +27,26 @@ public class PlayerMove : MonoBehaviour
       moveDirection = transform.TransformDirection(moveDirection);
       moveDirection *= speed;
 
-      // ジャンプ処理
-      if (Input.GetButton("Jump"))
-        moveDirection.y = jumpSpeed;
+      // ブーストキーによる高速移動
+      if (Input.GetButton("Boost"))
+      {
+        moveDirection.x *= 2;
+        moveDirection.z *= 2;
+      }
     }
 
-    // 重力を考慮する
-    moveDirection.y -= gravity * Time.deltaTime;
+    // ジャンプキーによる上昇
+    if (Input.GetButton("Jump"))
+    {
+      if (transform.position.y > 100)
+        moveDirection.y = 0;
+      else
+        moveDirection.y += gravity * Time.deltaTime;
+    }
+    else
+    {
+      moveDirection.y -= gravity * Time.deltaTime;
+    }
 
     // 動かす
     controller.Move(moveDirection * Time.deltaTime);
