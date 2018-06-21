@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-  void Start()
-  {
-
-  }
-
   public GameObject shot;
   public GameObject muzzle;
   public GameObject muzzleFlash;
 
   float shotInterval = 0;
   float shotIntervalMax = 0.25f;
+
+  AudioSource audioSource;
+
+  void Start()
+  {
+    audioSource = gameObject.GetComponent<AudioSource>();
+  }
+
 
   void Update()
   {
@@ -33,6 +36,7 @@ public class PlayerShoot : MonoBehaviour
 
         // マズルフラッシュを表示する
         Instantiate(muzzleFlash, muzzle.transform.position, transform.rotation);
+        audioSource.PlayOneShot(audioSource.clip);
       }
     }
   }

@@ -18,6 +18,10 @@ public class Enemy : MonoBehaviour
   public int armorPointMax = 1000;
   int damage = 100;
 
+  float timer = 0;
+
+  int enemyLevel = 0;
+
   void Start()
   {
     // ターゲットを取得
@@ -28,23 +32,54 @@ public class Enemy : MonoBehaviour
 
   void Update()
   {
-    // プレイヤーとの距離が近づくと攻撃してくる
-    if (Vector3.Distance(target.transform.position, transform.position) <= 30)
+    timer += Time.deltaTime;
+
+    // 経過時間に応じてレベルを上げる
+    if (timer < 5)
+      enemyLevel = 1;
+    else if (timer < 10)
+      enemyLevel = 2;
+    else if (timer < 15)
+      enemyLevel = 3;
+    else if (timer >= 15)
     {
-      // スムーズにターゲットの方向を向く
-      // エネミーの向くべき方向を算出する
-      Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
-      // スムーズに方向を変える。第三引数はスピード
-      transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+      enemyLevel = 4;
+      // レベル４：攻撃間隔が短くなる
+      shotIntervalMax = 0.5f;
+    }
 
-      shotInterval += Time.deltaTime;
-
-      if (shotInterval > shotIntervalMax)
+    // レベル２：プレイヤーが一定範囲に近づいたら攻撃
+    if (enemyLevel >= 2)
+    {
+      // プレイヤーとの距離が近づくと攻撃してくる
+      if (Vector3.Distance(target.transform.position, transform.position) <= 30)
       {
-        Instantiate(shot, transform.position, transform.rotation);
-        shotInterval = 0;
+        // スムーズにターゲットの方向を向く
+        // エネミーの向くべき方向を算出する
+        Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        // スムーズに方向を変える。第三引数はスピード
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5);
+
+        // 一定間隔でショット
+        shotInterval += Time.deltaTime;
+
+        if (shotInterval > shotIntervalMax)
+        {
+          Instantiate(shot, transform.position, transform.rotation);
+          shotInterval = 0;
+        }
+      }
+      else
+      {
+        // レベル３：プレイヤーに自分から近づく
+        if (enemyLevel >= 3)
+        {
+          transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.transform.position - transform.position), Time.deltaTime * 5);
+          transform.position += transform.forward * Time.deltaTime * 20;
+        }
       }
     }
+
   }
 
   private void OnCollisionEnter(Collision collider)

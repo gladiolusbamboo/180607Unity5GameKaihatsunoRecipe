@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -194,6 +195,12 @@ public class PlayerMove : MonoBehaviour
 
     // 動かす
     controller.Move(moveDirection * Time.deltaTime);
+
+    // 移動速度に合わせてモーションブラーの値を変える
+    float motionBlurValue = Mathf.Max(Mathf.Abs(moveSpeed.x), Mathf.Abs(moveSpeed.z)) / 20;
+    motionBlurValue = Mathf.Clamp(motionBlurValue, 0, 5);
+
+    Camera.main.GetComponent<CameraMotionBlur>().velocityScale = motionBlurValue;
 
     // ブーストゲージの伸縮
     gaugeImage.transform.localScale = new Vector3((float)boostPoint / boostPointMax, 1, 1);    
