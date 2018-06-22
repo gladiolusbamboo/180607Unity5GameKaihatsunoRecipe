@@ -9,12 +9,11 @@ public class EnemyInstantiate : MonoBehaviour
   float instantiateInterval = 3;
 
   // 生成する残数
-  int instantiateValue;
+  public static int instantiateValue;
 
   public GameObject enemy;
 
-  // Use this for initialization
-  void Start()
+  void Awake()
   {
     instantiateValue = 50;
   }

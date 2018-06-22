@@ -102,6 +102,9 @@ public class Enemy : MonoBehaviour
       {
         Destroy(gameObject);
         Instantiate(explosion, transform.position, transform.rotation);
+
+        // リザルト用のスコアを加算する
+        BattleManager.score++;
       }
     }
   }
