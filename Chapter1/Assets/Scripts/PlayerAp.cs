@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using UnityStandardAssets.ImageEffects;
+
 public class PlayerAp : MonoBehaviour
 {
   public static int armorPoint;
@@ -24,6 +26,8 @@ public class PlayerAp : MonoBehaviour
   {
     armorPoint = armorPointMax;
     displayArmorPoint = armorPoint;
+
+    Camera.main.GetComponent<NoiseAndScratches>().enabled = false;
   }
 
   void Update()
@@ -41,14 +45,20 @@ public class PlayerAp : MonoBehaviour
     if (percentageArmorpoint > 0.5f)
     {
       armorText.color = myWhite;
+      gaugeImage.color = new Color(0.25f, 0.7f, 0.6f);
     }
     else if (percentageArmorpoint > 0.3f)
     {
       armorText.color = myYellow;
+      gaugeImage.color = myYellow;
     }
     else
     {
       armorText.color = myRed;
+      gaugeImage.color = myRed;
+
+      // プレイヤーの体力が一定以下になったらノイズを有効にする
+      Camera.main.GetComponent<NoiseAndScratches>().enabled = true;
     }
 
     // ゲージの長さを体力の割合に合わせて伸縮させる

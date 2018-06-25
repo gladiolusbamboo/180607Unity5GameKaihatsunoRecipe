@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 public class BattleManager : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class BattleManager : MonoBehaviour
   // クリア条件となるスコア
   int clearScore;
 
+  public Camera resultCamera;
+
+  public GameObject resultCameraObject;
+
   void Start()
   {
     battleStatus = BATTLE_START;
@@ -38,6 +43,16 @@ public class BattleManager : MonoBehaviour
 
     // 敵の最大生成数をクリア数にする
     clearScore = EnemyInstantiate.instantiateValue;
+
+    // ゲーム開始時はリザルト用カメラをオフにする
+    resultCamera.enabled = false;
+
+    // ゲーム開始時は効果をオフにする
+    Camera.main.GetComponent<ColorCorrectionCurves>().enabled = false;
+    Camera.main.GetComponent<DepthOfField>().enabled = false;
+
+    resultCameraObject.GetComponent<ColorCorrectionCurves>().enabled = false;
+    resultCameraObject.GetComponent<DepthOfField>().enabled = false;
   }
 
   void Update()
@@ -63,6 +78,9 @@ public class BattleManager : MonoBehaviour
         {
           battleStatus = BATTLE_END;
           messageWin.enabled = true;
+
+          // 勝利時にリザルト用カメラに切り替える
+          resultCamera.enabled = true;
         }
 
         if (PlayerAp.armorPoint <= 0)
@@ -85,6 +103,18 @@ public class BattleManager : MonoBehaviour
 
             // 動きを再開する
             Time.timeScale = 1;
+          }
+
+          // 遷移可能状態になったらカメラの効果を有効にする
+          if (messageWin.enabled == true)
+          {
+            resultCamera.GetComponent<ColorCorrectionCurves>().enabled = true;
+            resultCamera.GetComponent<DepthOfField>().enabled = true;
+          }
+          else
+          {
+            Camera.main.GetComponent<ColorCorrectionCurves>().enabled = true;
+            Camera.main.GetComponent<DepthOfField>().enabled = true;
           }
         }
         break;
